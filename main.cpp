@@ -5,82 +5,13 @@
  */
 
 #include<iostream>
-#include<vector>
 #include<set>
+
+#include "main.h"
 
 using namespace std;
 
-typedef vector<int>::iterator VecIt;
 
-struct Network
-{
-  vector<int> contracts;
-}
-
-struct Prenetwork
-{
-  Prenetwork();
-  Prenetwork(vector<int> agents, vector<int> arrows, vector<int> contracts);
-  vector<int> agents;
-  vector<int> arrows;
-  vector<int> contracts;
-};
-
-struct Agent
-{
-  Agent();
-  // function ptr to utility function
-  int level; // only lower level agents can sell to higher level agents
-};
-
-struct Arrow
-{
-  Arrow();
-  Arrow(int contract, int origin, int target);
-  int contract;
-  int origin;
-  int target;
-};
-
-struct Contract
-{
-  Contract();
-  Contract(int qty, double price, int origin, int target);
-  int qty;
-  double price;
-  int origin;
-  int target;
-};
-
-// Constructors
-
-Prenetwork::Prenetwork() {};
-Prenetwork::Prenetwork(vector<int> agents_, vector<int> arrows_, vector<int> contracts_)
-{
-  agents = agents_;
-  arrows = arrows_;
-  contracts = contracts_;
-}
-
-Agent::Agent() {};
-
-
-Arrow::Arrow() {};
-Arrow::Arrow(int contract_, int origin_, int target_)
-{
-  contract = contract_;
-  origin = origin_;
-  target = target_;
-}
-
-Contract::Contract() {};
-Contract::Contract(int qty_, double price_, int origin_, int target_)
-{
-  qty = qty_;
-  price = price_;
-  origin = origin_;
-  target = target_;
-}
 
 // Choice function
 
@@ -158,14 +89,20 @@ void T_algorithm()
 // points to origin (favors suppliers)
 void minPrenetwork(vector<int> agents, vector<int> contracts, vector<Contract> contractDB)
 {
-  vector<int> arrows;
-  for (VecIt contract_it = contracts.begin(); contract_it != contracts.end(); ++contracts)
+  vector<Arrow> arrowDB;
+  for (VecIt contract_it = contracts.begin(); contract_it != contracts.end(); ++contract_it)
     {
       Contract temp = contractDB[*contract_it];
-      arrows.push_back(Arrow(temp, temp.target, temp.origin)); // arrow: target -> origin
+      arrowDB.push_back(Arrow(*contract_it, temp.target, temp.origin)); // arrow: target -> origin
+    }
+
+  vector<int> arrows;
+  for (vector<Arrow>::iterator arrow_it = arrowDB.begin(); arrow_it != arrowDB.end(); ++arrow_it)
+    {
+      //arrows.push_back(
     }
   
-  return Prenetwork(agents, ;
+  return Prenetwork(agents, arrows, contracts);
 }
 
 // points to target (favors consumers)
@@ -176,10 +113,10 @@ void maxPrenetwork(vector<int> agents, vector<int> contracts)
 
 Network F_map(Prenetwork prenetwork, vector<Arrow> arrowDB)
 {
-  vector<int> contractsTemp(network.contracts.size(), 0);
+  vector<int> contractsTemp(prenetwork.contracts.size(), 0);
   Network network;
 
-  for (VecIt arrow_it = network.arrows.begin(); arrow_it != network.arrows.end(); ++arrow_it)
+  for (VecIt arrow_it = prenetwork.arrows.begin(); arrow_it != prenetwork.arrows.end(); ++arrow_it)
     {
       ++contractsTemp[arrowDB[*arrow_it].contract];
     }
@@ -187,9 +124,9 @@ Network F_map(Prenetwork prenetwork, vector<Arrow> arrowDB)
   // if both arrows on the contract are included, then the contract is part of the network
   for (VecIt contract_it = contractsTemp.begin(); contract_it != contractsTemp.end(); ++contract_it)
     {
-      if (*contract_t == 2)
+      if (*contract_it == 2)
 	{
-	  network.push_back(*contract_t);
+	  network.contracts.push_back(*contract_it);
 	}
     }
 

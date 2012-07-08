@@ -1,9 +1,10 @@
 CFLAGS=-Wall -g
+CC=g++
 
 all: main
 
 main:
-	$(CC) $(CFLAGS) main.cpp -o main
+	$(CC) $(CFLAGS) main.cpp main.h -o main
 
 clean:
 	rm -f main
