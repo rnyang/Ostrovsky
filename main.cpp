@@ -4,25 +4,50 @@
  * Author: Runnan Yang
  */
 
-#include<iostream>
-#include<set>
-
 #include "main.h"
+#include <iostream>
+#include <set>
+#include <vector>
 
 using namespace std;
 
 
-
 // Choice function
-
 vector<int> choice(int agent, vector<int> contracts)
 {
   vector<int> choice_contracts;
 
-  // for each possible subset of contracts (i.e. power set), calculate utility
-  // find max utility subset and return it
+  // generate power set of contracts
+
+  // find max utility subset from power set
 
   return choice_contracts;
+}
+
+// Power Set function (recursive version)
+std::set< std::set<int> > powerset(std::set<int> set, std::set<int> left)
+{
+  set< set<int> > out;
+  out.append(set);
+
+  for (set<int>::iterator it = left.begin(); it != left.end(); ++it)
+    {
+      int temp = *it;
+      set.insert(temp);
+      left.erase(it);
+      set< set<int> > temp = powerset(set, left);
+      // copy over to out
+      
+      for (set< set<int> >::iterator it = temp.begin(); it != temp.end(); ++it)
+	{
+	  out.insert(*it);
+	}
+
+      left.insert(it, temp);
+      
+		
+    }
+  return out;
 }
 
 Prenetwork T_iterate(Prenetwork prenetwork, vector<Arrow> arrow_db)
@@ -77,38 +102,59 @@ Prenetwork T_iterate(Prenetwork prenetwork, vector<Arrow> arrow_db)
   return new_prenetwork;
 }
 
-void T_algorithm()
+// Check that arrows in Prenetwork are identical 
+// (i.e. is a fixed point in iterations of T_algorithm
+bool fixed_point(Prenetwork a, Prenetwork b)
+{
+  return (a.arrows == b.arrows);
+}
+
+Network T_algorithm(vector<int> agents, vector<int> contracts, vector<Arrow> arrow_db)
 {
   // setup the min prenetwork
+  Prenetwork p = minPrenetwork(agents, contracts);
+  Prenetwork next = T_iterate(p, arrow_db);
 
   // iterate while not fixed point
+  while (!fixed_point(p, next))
+    {
+      p = next;
+      next = T_iterate(p, arrow_db);
+    }
   
   // apply F_map
+  Network stableNet = F_map(p, arrow_db);
+
+  return stableNet;
 }
 
 // points to origin (favors suppliers)
-void minPrenetwork(vector<int> agents, vector<int> contracts, vector<Contract> contractDB)
+Prenetwork minPrenetwork(vector<int> agents, vector<int> contracts)
 {
-  vector<Arrow> arrowDB;
+  vector<int> arrows;
   for (VecIt contract_it = contracts.begin(); contract_it != contracts.end(); ++contract_it)
     {
-      Contract temp = contractDB[*contract_it];
-      arrowDB.push_back(Arrow(*contract_it, temp.target, temp.origin)); // arrow: target -> origin
+      arrows.push_back(contractToArrow(*contract_it, true));
     }
-
-  vector<int> arrows;
-  for (vector<Arrow>::iterator arrow_it = arrowDB.begin(); arrow_it != arrowDB.end(); ++arrow_it)
-    {
-      //arrows.push_back(
-    }
-  
   return Prenetwork(agents, arrows, contracts);
 }
 
 // points to target (favors consumers)
-void maxPrenetwork(vector<int> agents, vector<int> contracts)
+Prenetwork maxPrenetwork(vector<int> agents, vector<int> contracts)
 {
-  
+  vector<int> arrows;
+  for (VecIt contract_it = contracts.begin(); contract_it != contracts.end(); ++contract_it)
+    {
+      arrows.push_back(contractToArrow(*contract_it, false));
+    }
+  return Prenetwork(agents, arrows, contracts);
+}
+
+// map contract id's to arrow id's
+// returns 2*contract if towards target, 2*contract + 1 if towards origin
+int contractToArrow(int contract, bool towardsOrigin)
+{
+  return towardsOrigin + 2 * contract;
 }
 
 Network F_map(Prenetwork prenetwork, vector<Arrow> arrowDB)
@@ -135,6 +181,8 @@ Network F_map(Prenetwork prenetwork, vector<Arrow> arrowDB)
 
 int main(int argc, char** argv)
 {
+
+  /*
   int myAgents[] = {0,1,2};
   vector<int> agents (myAgents, myAgents + sizeof(myAgents) / sizeof(int) );
 
@@ -159,4 +207,8 @@ int main(int argc, char** argv)
   T_iterate(init, arrowDB);
 
   return 0;
+  */
+
+  int myInts = [1,2,3,4,5];
+  set<int> s (myInts, myInts+5);
 }

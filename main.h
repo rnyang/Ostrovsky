@@ -4,6 +4,7 @@
  * Author: Runnan Yang
  */
 
+#include<iostream>
 #include<vector>
 
 using namespace std;
@@ -82,3 +83,17 @@ Contract::Contract(int qty_, double price_, int origin_, int target_)
   origin = origin_;
   target = target_;
 }
+
+vector<int> choice(int agent, vector<int> contracts);
+
+Prenetwork T_iterate(Prenetwork prenetwork, vector<Arrow> arrow_db);
+Network T_algorithm(vector<int> agents, vector<int> contracts, vector<Arrow> arrow_db);
+
+Prenetwork minPrenetwork(vector<int> agents, vector<int> contracts);
+Prenetwork maxPrenetwork(vector<int> agents, vector<int> contracts);
+
+int contractToArrow(int contract, bool towardsOrigin);
+
+Network F_map(Prenetwork prenetwork, vector<Arrow> arrowDB);
+
+
