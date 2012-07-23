@@ -25,10 +25,10 @@ vector<int> choice(int agent, vector<int> contracts)
 }
 
 // Power Set function (recursive version)
-std::set< std::set<int> > powerset(std::set<int> set, std::set<int> left)
+set< set<int> > powerset(set<int> set, set<int> left)
 {
   set< set<int> > out;
-  out.append(set);
+  out.insert(set);
 
   for (set<int>::iterator it = left.begin(); it != left.end(); ++it)
     {
