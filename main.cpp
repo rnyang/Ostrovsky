@@ -24,18 +24,23 @@ vector<int> choice(int agent, vector<int> contracts)
   return choice_contracts;
 }
 
+set< set<int> > foo(set< set<int> > a)
+{
+  return a;
+}
+
 // Power Set function (recursive version)
-set< set<int> > powerset(set<int> set, set<int> left)
+set< set<int> > powerset(set<int> s, set<int> left)
 {
   set< set<int> > out;
-  out.insert(set);
+  out.insert(s);
 
   for (set<int>::iterator it = left.begin(); it != left.end(); ++it)
     {
-      int temp = *it;
-      set.insert(temp);
+      int tmp = *it;
+      s.insert(tmp);
       left.erase(it);
-      set< set<int> > temp = powerset(set, left);
+      set< set<int> > temp = powerset(s, left);
       // copy over to out
       
       for (set< set<int> >::iterator it = temp.begin(); it != temp.end(); ++it)
