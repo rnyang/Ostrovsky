@@ -27,10 +27,21 @@ struct Prenetwork
   vector<int> contracts;
 };
 
+struct Contract
+{
+  Contract();
+  Contract(int qty, double price, int origin, int target);
+  int qty;
+  double price;
+  int origin;
+  int target;
+};
+
 struct Agent
 {
   Agent();
   // function ptr to utility function
+  int utility(set<int> contracts, vector<Contract> contract_db);
   int level; // only lower level agents can sell to higher level agents
 };
 
@@ -39,16 +50,6 @@ struct Arrow
   Arrow();
   Arrow(int contract, int origin, int target);
   int contract;
-  int origin;
-  int target;
-};
-
-struct Contract
-{
-  Contract();
-  Contract(int qty, double price, int origin, int target);
-  int qty;
-  double price;
   int origin;
   int target;
 };
@@ -66,6 +67,7 @@ Prenetwork::Prenetwork(vector<int> agents_, vector<int> arrows_, vector<int> con
 }
 
 Agent::Agent() {};
+int Agent::utility(set<int> contracts, vector<Contract> contract_db){return 0;}
 
 
 Arrow::Arrow() {};
@@ -86,6 +88,11 @@ Contract::Contract(int qty_, double price_, int origin_, int target_)
 }
 
 vector<int> choice(int agent, vector<int> contracts);
+
+set< set<int> > combrec(set<int> prev, set<int> rest);
+vector< vector<int> > combrec(vector<int> prev, vector<int> rest);
+set< set<int> > powerset(set<int> s);
+vector< vector<int> > powerset(vector<int> s);
 
 Prenetwork T_iterate(Prenetwork prenetwork, vector<Arrow> arrow_db);
 Network T_algorithm(vector<int> agents, vector<int> contracts, vector<Arrow> arrow_db);

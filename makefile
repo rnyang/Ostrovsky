@@ -1,10 +1,10 @@
 CFLAGS=
 CC=g++
 
-all: main
+all: main.o
 
-main:
+main.o:
 	$(CC) $(CFLAGS) main.cpp main.h -o main
 
 clean:
-	rm -f main *# *~
+	rm -f main *# *~ *.o
