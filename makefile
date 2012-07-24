@@ -1,10 +1,10 @@
 CFLAGS=
 CC=g++
 
-all: main.o
+all: ostrovsky.o
 
-main.o:
-	$(CC) $(CFLAGS) main.cpp main.h -o main
+ostrovsky.o:
+	$(CC) $(CFLAGS) ostrovsky.cpp ostrovsky.h -o ostrovsky
 
 clean:
-	rm -f main *# *~ *.o
+	rm -f ostrovsky *# *~ *.o
